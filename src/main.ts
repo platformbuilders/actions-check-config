@@ -10,9 +10,12 @@ export async function run(): Promise<void> {
 
     // Check in parallel
     const files = await glob(fileEnv)
+    core.info(files.toString())
 
     if (files.length > 0) {
       files.forEach(async file => {
+        core.info(file)
+
         const contents = await fsPromises.readFile(file, 'utf-8')
 
         const result = contents.includes('CODEPUSH_KEY_PRD')
