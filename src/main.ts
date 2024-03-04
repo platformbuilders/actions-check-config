@@ -16,6 +16,8 @@ export async function run(): Promise<void> {
         const contents = await fsPromises.readFile(file, 'utf-8')
 
         const result = contents.includes('CODEPUSH_KEY_PRD')
+        core.info(contents)
+
         configCheck = !result
         // fs.readFile(file, function (err, data) {
         //   if (err) {
