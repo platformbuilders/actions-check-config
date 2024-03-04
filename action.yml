@@ -11,6 +11,9 @@ inputs:
   env_path:
     description: 'Path env file for check config'
     required: true
+  GITHUB_TOKEN:
+    description: 'GITHUB_TOKEN'
+    required: true
 # Define your outputs here.
 outputs:
   is_configured:
