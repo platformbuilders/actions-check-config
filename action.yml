@@ -1,23 +1,20 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Check Config Builders'
+description: 'Action for check if project is configured'
+author: 'Lucas Diniz'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'file-text'
+  color: 'green'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  env_path:
+    description: 'Path env file for check config'
     required: true
-    default: '1000'
-
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  is_configured:
+    description: 'If project is configured'
 
 runs:
   using: node20

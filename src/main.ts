@@ -1,26 +1,44 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import { glob } from 'glob'
+import { promises as fsPromises } from 'fs'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const fileEnv: string = core.getInput('env_path', { required: true }).trim()
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    let configCheck: boolean = false
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    // Check in parallel
+    const files = await glob(fileEnv)
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    if (files.length > 0) {
+      files.forEach(async file => {
+        const contents = await fsPromises.readFile(file, 'utf-8')
+
+        const result = contents.includes('CODEPUSH_KEY_PRD')
+        configCheck = !result
+        // fs.readFile(file, function (err, data) {
+        //   if (err) {
+        //     core.error(`Error: ${err.message}`)
+        //   } else {
+        //     configCheck = data.toString()
+        //     // forFile(data.toString(), file);
+        //   }
+        // })
+      })
+    }
+
+    if (!configCheck) {
+      core.info(`O codepush não está configurado`)
+      core.setOutput('is_configured', 'false')
+    } else {
+      core.info('🎉 Codepush está configurado')
+      core.setOutput('is_configured', 'true')
+    }
   } catch (error) {
-    // Fail the workflow run if an error occurs
-    if (error instanceof Error) core.setFailed(error.message)
+    if (!(error instanceof Error)) {
+      throw error
+    }
+    core.setFailed(error.message)
   }
 }
