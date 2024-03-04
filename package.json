@@ -1,7 +1,7 @@
 {
   "name": "action-check-config",
   "description": "GitHub Actions for check config",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "author": "",
   "private": true,
   "homepage": "https://github.com/platformbuilders/actions-check-config",

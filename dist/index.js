@@ -25024,22 +25024,11 @@ async function run() {
         let configCheck = false;
         // Check in parallel
         const files = await (0, glob_1.glob)(fileEnv);
-        core.info(files.toString());
         if (files.length > 0) {
             files.forEach(async (file) => {
-                core.info(file);
                 const contents = await fs_1.promises.readFile(file, 'utf-8');
                 const result = contents.includes('CODEPUSH_KEY_PRD');
-                core.info(contents);
                 configCheck = !result;
-                // fs.readFile(file, function (err, data) {
-                //   if (err) {
-                //     core.error(`Error: ${err.message}`)
-                //   } else {
-                //     configCheck = data.toString()
-                //     // forFile(data.toString(), file);
-                //   }
-                // })
             });
         }
         if (!configCheck) {
